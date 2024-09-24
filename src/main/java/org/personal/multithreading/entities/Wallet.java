@@ -1,5 +1,7 @@
 package org.personal.multithreading.entities;
 
+import org.personal.multithreading.exceptions.InsufficientBalanceException;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -30,10 +32,10 @@ public class Wallet {
      *
      * @param amount The amount to debit.
      */
-    public void debit(int amount) {
+    public void debit(int amount) throws InsufficientBalanceException {
         int currentBalance = balance.get();
         if (currentBalance < amount) {
-            throw new IllegalArgumentException("Insufficient balance");
+            throw new InsufficientBalanceException("Insufficient balance");
         }
         balance.getAndSet(currentBalance - amount);
     }

@@ -1,6 +1,7 @@
 package org.personal.multithreading.message;
 
 import org.personal.multithreading.entities.AppUser;
+import org.personal.multithreading.exceptions.InsufficientBalanceException;
 
 /**
  * One to one message
@@ -30,12 +31,27 @@ public class OneToOneMessage implements IMessage {
         try {
             this.from.getWallet().debit(cost);
             // send message sudo. Assuming a message is sent.
-            System.out.printf("Message sent from %s to %s: %s \n", from.getName(), to.getName(), message);
+            this.transferMessage();
             status = true;
-        } catch (Exception e) {
+        } catch (InsufficientBalanceException e) {
             System.out.printf("Failed to send message %s. Exception: %s \n", this, e.getMessage());
+        } catch (Exception e) {
+            System.err.printf("Failed to send message %s. Exception: %s \n", e.getMessage(), this);
+            this.from.getWallet().credit(cost);
         }
         return status;
+    }
+
+    /**
+     * Transfers the message.
+     * This is a dummy method to simulate message transfer.
+     * In real world, this method would be replaced by actual message transfer logic.
+     *
+     * @throws InterruptedException If the thread is interrupted.
+     */
+    private void transferMessage() throws InterruptedException {
+        Thread.sleep(100);
+        System.out.printf("Message sent from %s to %s: %s \n", from.getName(), to.getName(), message);
     }
 
     @Override

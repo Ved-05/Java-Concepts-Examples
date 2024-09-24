@@ -1,6 +1,8 @@
 package org.personal.multithreading;
 
 import org.personal.multithreading.entities.AppUser;
+import org.personal.multithreading.entities.AppUserGroup;
+import org.personal.multithreading.message.BroadcastMessage;
 import org.personal.multithreading.message.OneToOneMessage;
 import org.personal.multithreading.requests.IRequest;
 import org.personal.multithreading.requests.QueryBalance;
@@ -46,7 +48,7 @@ public class App {
         List<IRequest> requests = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             Random random = new Random();
-            int index = random.nextInt(2);
+            int index = random.nextInt(3);
             switch (index) {
                 case 0:
                     requests.add(new SendMessage(new OneToOneMessage(appUsers.get(0),
@@ -54,6 +56,12 @@ public class App {
                     break;
                 case 1:
                     requests.add(new QueryBalance(appUsers.get(0)));
+                    break;
+                case 2:
+                    AppUserGroup appUserGroup = new AppUserGroup("UserGroup");
+                    appUsers.forEach(appUserGroup::addUser);
+                    requests.add(new SendMessage(new BroadcastMessage(appUsers.get(0),
+                            appUserGroup, "Broadcasting all!")));
                     break;
             }
         }
