@@ -31,7 +31,7 @@ public class BroadcastTest {
         // Test the default constructor. The default balance should be 1000.
         assert fromAppUser.getWallet().getBalance() == 1000;
         // Send a message from one user to another.
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             toAppUserGroup.addUser(new AppUser("receiver" + (i + 1)));
         }
         IMessage broadcastMessage = new BroadcastMessage(fromAppUser, toAppUserGroup, "Hello!");

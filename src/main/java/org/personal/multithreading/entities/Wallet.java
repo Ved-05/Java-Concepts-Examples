@@ -48,4 +48,11 @@ public class Wallet {
     public void credit(int amount) {
         balance.getAndSet(balance.get() + amount);
     }
+
+    @Override
+    public String toString() {
+        return "Wallet{" +
+                "balance=" + balance.get() +
+                '}';
+    }
 }

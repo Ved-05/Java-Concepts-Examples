@@ -21,4 +21,14 @@ public class AppUser {
     public Wallet getWallet() {
         return this.wallet;
     }
+
+    @Override
+    public String toString() {
+        return "AppUser{" +
+                "name='" + name + '\'' +
+                ", wallet=" + wallet +
+                '}';
+    }
 }
+
+
