@@ -33,11 +33,17 @@ public class Wallet {
      * @param amount The amount to debit.
      */
     public void debit(int amount) throws InsufficientBalanceException {
-        int currentBalance = balance.get();
-        if (currentBalance < amount) {
-            throw new InsufficientBalanceException("Insufficient balance");
+        // Loop until successful atomic update
+        while (true) {
+            int currentBalance = balance.get();
+            if (currentBalance < amount) {
+                throw new InsufficientBalanceException("Insufficient balance");
+            }
+            // Atomically update the balance if no other thread has modified it
+            if (balance.compareAndSet(currentBalance, currentBalance - amount)) {
+                break; // Exit loop on success
+            }
         }
-        balance.getAndSet(currentBalance - amount);
     }
 
     /**
@@ -46,7 +52,7 @@ public class Wallet {
      * @param amount The amount to credit.
      */
     public void credit(int amount) {
-        balance.getAndSet(balance.get() + amount);
+        balance.getAndAdd(amount);
     }
 
     @Override
